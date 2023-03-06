@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}
+  Catalog
+{% endblock %}
+{% block content %}
+  <div class="text-center">
+    <h1>Catalog</h1>
+    <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+      {% for product in object_list %}
+          <div class="col">
+            <div class="card mb-4 rounded-3 shadow-sm">
+              <div class="card-header py-3">
+                <h4 class="my-0 fw-normal">{{product.name}}</h4>
+              </div>
+              <div class="card-body">
+                <img src="{{ product.image.url }}" class="rounded mx-auto d-block" width="200"/>
+                <h1 class="card-title pricing-card-title"><small class="text-muted fw-light">$</small>{{product.price}}</h1>
+                <button type="button" class="w-100 btn btn-lg btn-outline-primary">Buy</button>
+              </div>
+            </div>
+          </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}

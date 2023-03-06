@@ -18,3 +18,6 @@ class Product(models.Model):
     size_l_qty = models.IntegerField(default=0)
     size_xl_qty = models.IntegerField(default=0)
     image = models.ImageField(upload_to='images/catalog')
+
+    def __str__(self):
+        return f'{self.name} | {self.category}'
