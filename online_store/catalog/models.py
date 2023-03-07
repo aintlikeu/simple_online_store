@@ -13,8 +13,8 @@ class Product(models.Model):
     category = models.CharField(max_length=2, choices=CATEGORY_CHOICES, default=None)
     article_number = models.CharField(max_length=50, unique=True)
     price = models.FloatField()
-    stock = models.PositiveIntegerField(default=0)
+    size_s_qty = models.IntegerField(default=0)
+    size_m_qty = models.IntegerField(default=0)
+    size_l_qty = models.IntegerField(default=0)
+    size_xl_qty = models.IntegerField(default=0)
     image = models.ImageField(upload_to='images/catalog')
-
-    def __str__(self):
-        return f'{self.name} | {self.category}'
