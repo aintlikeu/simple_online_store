@@ -17,7 +17,7 @@ def login_view(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('authuser:home')
+                return redirect('catalog:product_list')
             else:
                 messages.success(request, 'Something went wrong. Please try again')
                 return redirect('authuser:login')
@@ -32,7 +32,7 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     messages.success(request, 'You logged out')
-    return redirect('authuser:home')
+    return redirect('catalog:product_list')
 
 
 def register_view(request):
@@ -45,7 +45,7 @@ def register_view(request):
             user = authenticate(request, username=username, password=password)
             login(request, user)
             messages.success(request, 'You were registered and logged in.')
-            return redirect('authuser:home')
+            return redirect('catalog:product_list')
         else:
             messages.success(request, 'Something went wrong. Please try again')
             return redirect('authuser:register')

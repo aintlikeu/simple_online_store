@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'authuser',
-    'catalog'
+    'catalog',
+    'shopping_cart'
 ]
 
 AUTH_USER_MODEL = 'authuser.User'
