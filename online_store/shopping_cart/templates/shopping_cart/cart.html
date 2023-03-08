@@ -34,7 +34,8 @@ Shopping cart
             </tr>
       </tbody>
     </table>
+    <a href="{% url 'shopping_cart:clear_cart' %}" type="button" class="btn btn-light">Clear shopping cart</a>
 {% else %}
-    <p>Your shopping cart is empty</p>x
+    <p>Your shopping cart is empty</p>
 {% endif %}
 {% endblock %}
