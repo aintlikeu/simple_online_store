@@ -5,8 +5,36 @@ Shopping cart
 {% block content%}
 <h1>Shopping Cart</h1>
 {% if cart.items.all %}
-    {% for item in cart.items.all %}
-        <p>{{ item.product.name }} x{{ item.quantity }}</p>
-    {% endfor %}
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Product</th>
+            <th scope="col">Price</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Cost</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in cart.items.all %}
+            <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td><a href="{% url 'catalog:product_detail' item.product.pk %}" class="text-decoration-none">{{ item.product.name }}</a></td>
+                <td>${{ item.product.price|floatformat:2 }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>${% widthratio item.product.price 1 item.quantity as result %}{{result|floatformat:2}}</td>
+            </tr>
+        {% endfor %}
+            <tr>
+                <th scope="row"></th>
+                <td></td>
+                <td></td>
+                <td>Total:</td>
+                <td>${{ cart.get_total_cost|floatformat:2 }}</td>
+            </tr>
+      </tbody>
+    </table>
+{% else %}
+    <p>Your shopping cart is empty</p>x
 {% endif %}
 {% endblock %}
