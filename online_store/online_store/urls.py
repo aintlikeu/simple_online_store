@@ -20,7 +20,7 @@ from . import settings
 
 urlpatterns = [
     path('', include('catalog.urls')),
+    path('', include('shopping_cart.urls')),
     path('admin/', admin.site.urls),
     path('auth/', include('authuser.urls')),
-    path('shopping_cart/', include('shopping_cart.urls'))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
