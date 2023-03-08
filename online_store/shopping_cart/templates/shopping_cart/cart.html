@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}
+Shopping cart
+{% endblock %}
+{% block content%}
+<h1>Shopping Cart</h1>
+{% if cart.items.all %}
+    {% for item in cart.items.all %}
+        <p>{{ item.product.name }} x{{ item.quantity }}</p>
+    {% endfor %}
+{% endif %}
+{% endblock %}

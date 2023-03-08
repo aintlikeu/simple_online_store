@@ -17,7 +17,7 @@
               <div class="card-body">
                 <img src="{{ product.image.url }}" class="rounded mx-auto d-block" width="200"/>
                 <h1 class="card-title pricing-card-title"><small class="text-muted fw-light">$</small>{{product.price}}</h1>
-                <button type="button" class="w-100 btn btn-lg btn-outline-primary">Buy</button>
+                <a href="{% url 'shopping_cart:add_to_cart' product.pk %}" role="button" class="w-100 btn btn-lg btn-outline-primary">Buy</a>
               </div>
             </div>
           </div>
