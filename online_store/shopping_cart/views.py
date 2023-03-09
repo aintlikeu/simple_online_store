@@ -17,9 +17,11 @@ def add_to_cart(request, product_id):
     cart_item, _ = CartItem.objects.get_or_create(cart=cart, product=product)
     cart_item.quantity += 1
     cart_item.save()
-    return redirect('shopping_cart:show_cart')
+    # redirect to the same page from where you added item to the shopping cart
+    return redirect(request.META.get('HTTP_REFERER', '/'))
 
 
+@login_required()
 def remove_from_cart(request, product_id):
     cart, _ = Cart.objects.get_or_create(user=request.user)
     product = get_object_or_404(Product, pk=product_id)
@@ -32,6 +34,7 @@ def remove_from_cart(request, product_id):
     return redirect('shopping_cart:show_cart')
 
 
+@login_required()
 def clear_cart(request):
     cart = Cart.objects.get(user=request.user)
     cart = CartItem.objects.filter(cart=cart).delete()
