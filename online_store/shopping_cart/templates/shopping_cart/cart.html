@@ -21,7 +21,11 @@ Shopping cart
                 <th scope="row">{{ forloop.counter }}</th>
                 <td><a href="{% url 'catalog:product_detail' item.product.pk %}" class="text-decoration-none">{{ item.product.name }}</a></td>
                 <td>${{ item.product.price|floatformat:2 }}</td>
-                <td>{{ item.quantity }}</td>
+                <td>
+                    <a href="{% url 'shopping_cart:remove_from_cart' item.product.pk %}" role="button" class="btn btn-outline-secondary btn-sm">-1</a>
+                    &nbsp;&nbsp;{{ item.quantity }}&nbsp;&nbsp;
+                    <a href="{% url 'shopping_cart:add_to_cart' item.product.pk %}" role="button" class="btn btn-outline-secondary btn-sm">+1</a>
+                </td>
                 <td>${% widthratio item.product.price 1 item.quantity as result %}{{result|floatformat:2}}</td>
             </tr>
         {% endfor %}
@@ -34,7 +38,7 @@ Shopping cart
             </tr>
       </tbody>
     </table>
-    <a href="{% url 'shopping_cart:clear_cart' %}" type="button" class="btn btn-light">Clear shopping cart</a>
+    <a href="{% url 'shopping_cart:clear_cart' %}" role="button" class="btn btn-light">Clear shopping cart</a>
 {% else %}
     <p>Your shopping cart is empty</p>
 {% endif %}

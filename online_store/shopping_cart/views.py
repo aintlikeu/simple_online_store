@@ -20,8 +20,16 @@ def add_to_cart(request, product_id):
     return redirect('shopping_cart:show_cart')
 
 
-def remove_from_cart(request, cart_item):
-    pass
+def remove_from_cart(request, product_id):
+    cart, _ = Cart.objects.get_or_create(user=request.user)
+    product = get_object_or_404(Product, pk=product_id)
+    cart_item = CartItem.objects.get(cart=cart, product=product)
+    if cart_item.quantity > 1:
+        cart_item.quantity -= 1
+        cart_item.save()
+    else:
+        cart_item.delete()
+    return redirect('shopping_cart:show_cart')
 
 
 def clear_cart(request):
