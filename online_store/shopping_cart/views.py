@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from .models import Cart, CartItem
 from catalog.models import Product
-
+from .forms import OrderForm
 
 def show_cart(request):
     cart, _ = Cart.objects.get_or_create(user=request.user)
@@ -39,3 +39,11 @@ def clear_cart(request):
     cart = Cart.objects.get(user=request.user)
     cart = CartItem.objects.filter(cart=cart).delete()
     return redirect('shopping_cart:show_cart')
+
+
+@login_required()
+def checkout(request):
+    if request.method == 'GET':
+        cart, _ = Cart.objects.get_or_create(user=request.user)
+        form = OrderForm()
+        return render(request, 'shopping_cart/checkout.html', {'cart': cart, 'form': form})
