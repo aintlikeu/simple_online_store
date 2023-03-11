@@ -17,4 +17,4 @@ class Product(models.Model):
     image = models.ImageField(upload_to='images/catalog')
 
     def __str__(self):
-        return f'{self.name} | {self.category}'
+        return f'{self.name} | stock: {self.stock}'

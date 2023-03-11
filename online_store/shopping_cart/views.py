@@ -1,9 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.shortcuts import get_object_or_404
 from .models import Cart, CartItem
 from catalog.models import Product
 from .forms import OrderForm
+
 
 def show_cart(request):
     cart, _ = Cart.objects.get_or_create(user=request.user)
@@ -37,13 +39,28 @@ def remove_from_cart(request, product_id):
 @login_required()
 def clear_cart(request):
     cart = Cart.objects.get(user=request.user)
-    cart = CartItem.objects.filter(cart=cart).delete()
+    CartItem.objects.filter(cart=cart).delete()
     return redirect('shopping_cart:show_cart')
+
+
+def if_enough_stocks(request):
+    cart = Cart.objects.get(user=request.user)
+    cart_item = CartItem.objects.filter(cart=cart)
+    for item in cart_item:
+        if item.quantity > item.product.stock:
+            item.quantity = item.product.stock
+            item.save()
+            # if item.quantity == 0:
+            #     item.delete()
+            messages.success(request, f'{item.product.name} - {item.product.stock} in stocks')
+        print(item.quantity)
 
 
 @login_required()
 def checkout(request):
     if request.method == 'GET':
+        if_enough_stocks(request)
         cart, _ = Cart.objects.get_or_create(user=request.user)
         form = OrderForm()
         return render(request, 'shopping_cart/checkout.html', {'cart': cart, 'form': form})
+
