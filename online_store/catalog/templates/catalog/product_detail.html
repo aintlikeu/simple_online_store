@@ -7,6 +7,7 @@
     <p><h1>{{ product.name }}</h1></p>
     <p><h2>${{ product.price }}</h2></p>
     <img src="{{product.image.url}}" class="rounded mx-auto d-block" alt="" width="200">
+    In stock: {{ product.stock }}
     <br><a href="{% url 'shopping_cart:add_to_cart' product.pk %}" role="button" class="btn btn-outline-primary btn-lg col-2">Buy</a>
   </div>
 {% endblock %}
