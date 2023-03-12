@@ -1,5 +1,5 @@
 from django.forms import ModelForm, TextInput, Textarea
-from .models import Order
+from shopping_cart.models import Order
 
 
 class OrderForm(ModelForm):

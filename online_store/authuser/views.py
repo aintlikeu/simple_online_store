@@ -1,11 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from .forms import LoginUserForm, RegistrationForm
-
-
-def example_view(request):
-    return render(request, 'authuser/example.html')
+from authuser.forms import LoginUserForm, RegistrationForm
 
 
 def login_view(request):

@@ -2,9 +2,9 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
-from .models import Cart, CartItem, Order, OrderItem
+from shopping_cart.models import Cart, CartItem, Order, OrderItem
 from catalog.models import Product
-from .forms import OrderForm
+from shopping_cart.forms import OrderForm
 
 
 def show_cart(request):
