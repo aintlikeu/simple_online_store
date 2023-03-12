@@ -11,16 +11,20 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+import yaml
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Use config.yaml files for secret keys etc
+with open(BASE_DIR / 'config.yaml', 'r') as f:
+    config = yaml.safe_load(f)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-zd0oc)48%71knd-g=-^o-8s(yhrtq$w2oa=#451l6@p2g1r8$q'
+SECRET_KEY = config['secret_key']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True

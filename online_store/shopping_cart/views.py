@@ -79,7 +79,7 @@ def checkout(request):
             cart_item.delete()
             return redirect('shopping_cart:thank_you')
         else:
-            messages.success(request, 'Something went wrong. Please try again')
+            messages.error(request, 'Something went wrong. Please try again', extra_tags='alert-danger')
             return redirect('shopping_cart:checkout')
 
 
@@ -95,4 +95,4 @@ def if_enough_stocks(request):
         if item.quantity > item.product.stock:
             item.quantity = item.product.stock
             item.save()
-            messages.success(request, f'{item.product.name} - {item.product.stock} in stock')
+            messages.error(request, f'{item.product.name} - {item.product.stock} in stock', extra_tags='alert-danger')

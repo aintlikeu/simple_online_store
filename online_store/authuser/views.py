@@ -15,10 +15,10 @@ def login_view(request):
                 login(request, user)
                 return redirect('catalog:product_list')
             else:
-                messages.success(request, 'Something went wrong. Please try again')
+                messages.error(request, 'Something went wrong. Please try again', extra_tags='alert-danger')
                 return redirect('authuser:login')
         else:
-            messages.success(request, 'Something went wrong. Please try again')
+            messages.error(request, 'Something went wrong. Please try again', extra_tags='alert-danger')
             return redirect('authuser:login')
     else:
         form = LoginUserForm()
@@ -27,7 +27,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    messages.success(request, 'You logged out')
+    messages.success(request, 'You logged out', extra_tags='alert-success')
     return redirect('catalog:product_list')
 
 
@@ -40,10 +40,10 @@ def register_view(request):
             password = form.cleaned_data['password1']
             user = authenticate(request, username=username, password=password)
             login(request, user)
-            messages.success(request, 'You were registered and logged in.')
+            messages.success(request, 'You were registered and logged in.', extra_tags='alert-success')
             return redirect('catalog:product_list')
         else:
-            messages.success(request, 'Something went wrong. Please try again')
+            messages.error(request, 'Something went wrong. Please try again', extra_tags='alert-danger')
             return redirect('authuser:register')
     else:
         form = RegistrationForm()
