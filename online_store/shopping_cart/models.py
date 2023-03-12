@@ -27,11 +27,21 @@ class CartItem(models.Model):
 
 
 class Order(models.Model):
+
+    STATUS_CHOICES = [
+        ("PENDING", "Pending"),
+        ("PROCESSING", "Processing"),
+        ("SHIPPED", "Shipped"),
+        ("DELIVERED", "Delivered"),
+        ("CANCELED", "Canceled"),
+        ("ONHOLD", "On hold")
+    ]
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     placed_at = models.DateTimeField(auto_now_add=True)
     address = models.TextField()
     phone = models.CharField(max_length=10)
-    status = models.CharField(max_length=100)
+    status = models.CharField(max_length=100, choices=STATUS_CHOICES)
 
     def __str__(self):
         return f'Order #{self.pk} ({self.user})'

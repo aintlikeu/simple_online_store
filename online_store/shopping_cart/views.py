@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
+from django.db.models import Case, PositiveIntegerField, When, F
 from shopping_cart.models import Cart, CartItem, Order, OrderItem
 from catalog.models import Product
 from shopping_cart.forms import OrderForm
@@ -59,21 +60,21 @@ def checkout(request):
                 user=request.user,
                 address=form.cleaned_data['address'],
                 phone=form.cleaned_data['phone'],
-                status='placed'
+                status='PENDING'
             )
             cart = Cart.objects.get(user=request.user)
             cart_item = CartItem.objects.filter(cart=cart)
 
-            for item in cart_item:
-                OrderItem.objects.create(
-                    order=order,
-                    product=item.product,
-                    quantity=item.quantity
-                )
-                # updating stocks
-                product = Product.objects.get(pk=item.product.pk)
-                product.stock -= item.quantity
-                product.save()
+            # bulk creation of OrderItem for items in Shopping cart
+            order_item_list = [OrderItem(order=order, product=item.product, quantity=item.quantity) for item
+                               in cart_item]
+            OrderItem.objects.bulk_create(order_item_list)
+
+            # updating stocks
+            Product.objects.filter(pk__in=[item.product.pk for item in cart_item]).update(
+                stock=F('stock') - Case(*[When(pk=item.product.pk, then=item.quantity) for item in cart_item],
+                                        output_field=PositiveIntegerField())
+            )
 
             # clearing the shopping cart
             cart_item.delete()
