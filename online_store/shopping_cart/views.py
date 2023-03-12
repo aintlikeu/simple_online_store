@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from django.views import View
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
 from django.db.models import Case, PositiveIntegerField, When, F
@@ -45,14 +47,15 @@ def clear_cart(request):
     return redirect('shopping_cart:show_cart')
 
 
-@login_required()
-def checkout(request):
-    if request.method == 'GET':
+@method_decorator(login_required, name='dispatch')
+class CheckoutView(View):
+    def get(self, request):
         if_enough_stocks(request)
         cart, _ = Cart.objects.get_or_create(user=request.user)
         form = OrderForm()
         return render(request, 'shopping_cart/checkout.html', {'cart': cart, 'form': form})
-    else:
+
+    def post(self, request):
         form = OrderForm(request.POST)
         # placing the order
         if form.is_valid():
