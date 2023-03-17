@@ -14,21 +14,22 @@ class ShoppingCartRepository:
 
     def get_all_cart_items(self):
         cart = self.get_cart()
-        cart_items, _ = CartItem.objects.get_or_create(cart=cart)
+        cart_items = CartItem.objects.filter(cart=cart)
         return cart_items
 
-    def get_cart_item(self, product):
+    def get_cart_item(self, product_id):
         cart = self.get_cart()
+        product = get_object_or_404(Product, pk=product_id)
         cart_item, _ = CartItem.objects.get_or_create(cart=cart, product=product)
         return cart_item
 
-    def add_to_cart(self, product):
-        cart_item = self.get_cart_item(product)
+    def add_to_cart(self, product_id):
+        cart_item = self.get_cart_item(product_id)
         cart_item.quantity += 1
         cart_item.save()
 
-    def extract_from_cart(self, product):
-        cart_item = self.get_cart_item(product)
+    def extract_from_cart(self, product_id):
+        cart_item = self.get_cart_item(product_id)
         if cart_item.quantity > 1:
             cart_item.quantity -= 1
             cart_item.save()
@@ -46,7 +47,6 @@ class ShoppingCartRepository:
             phone=form.cleaned_data['phone'],
             status='PENDING'
         )
-        cart = self.get_cart()
         cart_items = self.get_all_cart_items()
 
         # bulk creation of OrderItem for items in Shopping cart

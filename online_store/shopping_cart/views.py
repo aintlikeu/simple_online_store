@@ -3,13 +3,9 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.contrib import messages
-from django.shortcuts import get_object_or_404
-from django.db.models import Case, PositiveIntegerField, When, F
-from shopping_cart.models import Cart, CartItem, Order, OrderItem
-from catalog.models import Product
 from shopping_cart.forms import OrderForm
 from shopping_cart.repository import ShoppingCartRepository
-from shopping_cart.services import if_enough_stocks, get_product_by_id
+from shopping_cart.services import if_enough_stocks
 
 
 def show_cart_view(request):
@@ -21,8 +17,7 @@ def show_cart_view(request):
 @login_required()
 def add_to_cart_view(request, product_id):
     repository = ShoppingCartRepository(request.user)
-    product = get_product_by_id(product_id)
-    repository.add_to_cart(product)
+    repository.add_to_cart(product_id)
     if_enough_stocks(request)
     # redirect to the same page from where you added item to the shopping cart
     return redirect(request.META.get('HTTP_REFERER', '/'))
@@ -31,8 +26,7 @@ def add_to_cart_view(request, product_id):
 @login_required()
 def extract_from_cart_view(request, product_id):
     repository = ShoppingCartRepository(request.user)
-    product = get_product_by_id(product_id)
-    repository.extract_from_cart(product)
+    repository.extract_from_cart(product_id)
     return redirect('shopping_cart:show_cart')
 
 
