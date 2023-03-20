@@ -3,3 +3,4 @@ venv/
 .todo
 online_store/db.sqlite3
 online_store/config.yaml
+online_store/media/
