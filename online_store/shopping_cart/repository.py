@@ -9,7 +9,7 @@ class ShoppingCartRepository:
         self.user = user
 
     def get_cart(self):
-        cart, _ = Cart.objects.get_or_create(self.user)
+        cart, _ = Cart.objects.get_or_create(user=self.user)
         return cart
 
     def get_all_cart_items(self):
