@@ -18,7 +18,8 @@ def show_cart_view(request):
 def add_to_cart_view(request, product_id):
     repository = ShoppingCartRepository(request.user)
     repository.add_to_cart(product_id)
-    if_enough_stocks(request)
+    cart_items = repository.get_all_cart_items()
+    if_enough_stocks(request, cart_items)
     # redirect to the same page from where you added item to the shopping cart
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
@@ -41,7 +42,8 @@ def clear_cart_view(request):
 class CheckoutView(View):
     def get(self, request):
         repository = ShoppingCartRepository(request.user)
-        if_enough_stocks(request)
+        cart_items = repository.get_all_cart_items()
+        if_enough_stocks(request, cart_items)
         cart = repository.get_cart()
         form = OrderForm()
         return render(request, 'shopping_cart/checkout.html', {'cart': cart, 'form': form})
