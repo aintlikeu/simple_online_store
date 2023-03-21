@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
+from django.views import View
 from django.contrib import messages
 from authuser.forms import LoginUserForm, RegistrationForm
 
 
-def login_view(request):
-    if request.method == 'POST':
+class LoginView(View):
+    def post(self, request):
         form = LoginUserForm(data=request.POST)
         if form.is_valid():
             username = form.cleaned_data['username']
@@ -20,19 +21,21 @@ def login_view(request):
         else:
             messages.error(request, 'Something went wrong. Please try again', extra_tags='alert-danger')
             return redirect('authuser:login')
-    else:
+
+    def get(self, request):
         form = LoginUserForm()
         return render(request, 'authuser/login.html', context={'form': form})
 
 
-def logout_view(request):
-    logout(request)
-    messages.success(request, 'You logged out', extra_tags='alert-success')
-    return redirect('catalog:product_list')
+class LogoutView(View):
+    def get(self, request):
+        logout(request)
+        messages.success(request, 'You logged out', extra_tags='alert-success')
+        return redirect('catalog:product_list')
 
 
-def register_view(request):
-    if request.method == 'POST':
+class RegisterView(View):
+    def post(self, request):
         form = RegistrationForm(data=request.POST)
         if form.is_valid():
             form.save()
@@ -45,6 +48,7 @@ def register_view(request):
         else:
             messages.error(request, 'Something went wrong. Please try again', extra_tags='alert-danger')
             return redirect('authuser:register')
-    else:
+
+    def get(self, request):
         form = RegistrationForm()
         return render(request, 'authuser/register.html', context={'form': form})

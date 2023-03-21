@@ -27,7 +27,7 @@ with open(BASE_DIR / 'config.yaml', 'r') as f:
 SECRET_KEY = config['secret_key']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config['debug']
 
 ALLOWED_HOSTS = []
 
