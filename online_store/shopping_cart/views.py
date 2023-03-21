@@ -5,7 +5,7 @@ from django.views import View
 from django.contrib import messages
 from shopping_cart.forms import OrderForm
 from shopping_cart.repository import ShoppingCartRepository
-from shopping_cart.services import if_enough_stocks
+from shopping_cart.services import if_enough_stocks, NotEnoughStockException
 
 
 def show_cart_view(request):
@@ -19,7 +19,10 @@ def add_to_cart_view(request, product_id):
     repository = ShoppingCartRepository(request.user)
     repository.add_to_cart(product_id)
     cart_items = repository.get_all_cart_items()
-    if_enough_stocks(request, cart_items)
+    try:
+        if_enough_stocks(cart_items)
+    except NotEnoughStockException as e:
+        messages.error(request, str(e), extra_tags='alert-danger')
     # redirect to the same page from where you added item to the shopping cart
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
@@ -43,7 +46,10 @@ class CheckoutView(View):
     def get(self, request):
         repository = ShoppingCartRepository(request.user)
         cart_items = repository.get_all_cart_items()
-        if_enough_stocks(request, cart_items)
+        try:
+            if_enough_stocks(cart_items)
+        except NotEnoughStockException as e:
+            messages.error(request, str(e), extra_tags='alert-danger')
         cart = repository.get_cart()
         form = OrderForm()
         return render(request, 'shopping_cart/checkout.html', {'cart': cart, 'form': form})
