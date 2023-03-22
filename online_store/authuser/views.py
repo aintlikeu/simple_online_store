@@ -9,9 +9,9 @@ class LoginView(View):
     def post(self, request):
         form = LoginUserForm(data=request.POST)
         if form.is_valid():
-            username = form.cleaned_data['username']
+            email = form.cleaned_data['username']
             password = form.cleaned_data['password']
-            user = authenticate(request, username=username, password=password)
+            user = authenticate(request, email=email, password=password)
             if user is not None:
                 login(request, user)
                 return redirect('catalog:product_list')
@@ -39,9 +39,9 @@ class RegisterView(View):
         form = RegistrationForm(data=request.POST)
         if form.is_valid():
             form.save()
-            username = form.cleaned_data['username']
+            email = form.cleaned_data['email']
             password = form.cleaned_data['password1']
-            user = authenticate(request, username=username, password=password)
+            user = authenticate(request, email=email, password=password)
             login(request, user)
             messages.success(request, 'You were registered and logged in.', extra_tags='alert-success')
             return redirect('catalog:product_list')

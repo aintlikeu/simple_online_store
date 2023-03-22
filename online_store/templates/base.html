@@ -36,7 +36,7 @@
           {% if user.is_authenticated %}
             <a href="{% url 'shopping_cart:show_cart' %}" class="text-decoration-none">
             <i class="bi bi-basket2">&nbsp;</i>
-                {{ user.username }}
+                {{ user.email }}
             </a>
           {% endif %}
         </span>
