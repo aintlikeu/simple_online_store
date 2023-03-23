@@ -8,6 +8,7 @@ from shopping_cart.repository import ShoppingCartRepository
 from shopping_cart.services import if_enough_stocks, NotEnoughStockException
 
 
+@login_required()
 def show_cart_view(request):
     repository = ShoppingCartRepository(request.user)
     cart = repository.get_cart()

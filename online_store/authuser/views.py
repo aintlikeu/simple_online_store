@@ -8,16 +8,16 @@ from authuser.forms import LoginUserForm, RegistrationForm
 class LoginView(View):
     def post(self, request):
         form = LoginUserForm(data=request.POST)
-        if form.is_valid():
-            email = form.cleaned_data['username']
-            password = form.cleaned_data['password']
-            user = authenticate(request, email=email, password=password)
-            if user is not None:
-                login(request, user)
-                return redirect('catalog:product_list')
-            else:
-                messages.error(request, 'Something went wrong. Please try again', extra_tags='alert-danger')
-                return redirect('authuser:login')
+        if not form.is_valid():
+            messages.error(request, 'Something went wrong. Please try again', extra_tags='alert-danger')
+            return redirect('authuser:login')
+
+        email = form.cleaned_data['username']
+        password = form.cleaned_data['password']
+        user = authenticate(request, email=email, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('catalog:product_list')
         else:
             messages.error(request, 'Something went wrong. Please try again', extra_tags='alert-danger')
             return redirect('authuser:login')
@@ -37,17 +37,17 @@ class LogoutView(View):
 class RegisterView(View):
     def post(self, request):
         form = RegistrationForm(data=request.POST)
-        if form.is_valid():
-            form.save()
-            email = form.cleaned_data['email']
-            password = form.cleaned_data['password1']
-            user = authenticate(request, email=email, password=password)
-            login(request, user)
-            messages.success(request, 'You were registered and logged in.', extra_tags='alert-success')
-            return redirect('catalog:product_list')
-        else:
+        if not form.is_valid():
             messages.error(request, 'Something went wrong. Please try again', extra_tags='alert-danger')
             return redirect('authuser:register')
+
+        form.save()
+        email = form.cleaned_data['email']
+        password = form.cleaned_data['password1']
+        user = authenticate(request, email=email, password=password)
+        login(request, user)
+        messages.success(request, 'You were registered and logged in.', extra_tags='alert-success')
+        return redirect('catalog:product_list')
 
     def get(self, request):
         form = RegistrationForm()
