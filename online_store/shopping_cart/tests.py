@@ -2,7 +2,8 @@ import pytest
 from django.urls import reverse
 from authuser.models import User
 from catalog.models import Product, Category
-from shopping_cart.models import Cart, CartItem
+from shopping_cart.models import Cart, CartItem, Order, OrderItem
+from shopping_cart.forms import OrderForm
 
 
 @pytest.fixture
@@ -95,5 +96,37 @@ def test_thank_you_view(client):
 
 
 @pytest.mark.django_db
-def test_checkout_view_get(client, user, cart, cart_item):
+def test_checkout_view_get_empty_basket(client, cart):
+    url = reverse('shopping_cart:checkout')
+    response = client.get(url)
+    assert response.status_code == 200
+    assert response.templates[0].name == 'shopping_cart/checkout.html'
+    assert b'Your shopping cart is empty' in response.content
+
+
+@pytest.mark.django_db
+def test_checkout_view_get_not_empty_basket(client, cart, cart_item):
+    url = reverse('shopping_cart:checkout')
+    response = client.get(url)
+    assert response.status_code == 200
+    assert response.templates[0].name == 'shopping_cart/checkout.html'
+    assert isinstance(response.context['form'], OrderForm)
+    assert isinstance(response.context['cart'], Cart)
+    assert response.context['cart'] == cart
+
+
+@pytest.mark.django_db
+def test_checkout_view_valid_form(client, cart, cart_item):
+
+    valid_form = {'phone': '+79123456789',
+                  'address': 'home'}
+
+    url = reverse('shopping_cart:checkout')
+    response = client.post(url, data=valid_form)
+    assert response.url == reverse('shopping_cart:thank_you')
+    # assert Order.objects.count() == 1
+
+
+@pytest.mark.django_db
+def test_checkout_view_invalid_form():
     pass
