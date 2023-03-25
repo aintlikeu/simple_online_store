@@ -40,7 +40,7 @@ class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     placed_at = models.DateTimeField(auto_now_add=True)
     address = models.TextField()
-    phone = models.CharField(max_length=10)
+    phone = models.CharField(max_length=12)
     status = models.CharField(max_length=100, choices=STATUS_CHOICES)
 
     def __str__(self):

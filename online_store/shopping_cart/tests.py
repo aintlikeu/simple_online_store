@@ -117,16 +117,24 @@ def test_checkout_view_get_not_empty_basket(client, cart, cart_item):
 
 @pytest.mark.django_db
 def test_checkout_view_valid_form(client, cart, cart_item):
-
+    product_qty = cart_item.quantity
+    product = cart_item.product
     valid_form = {'phone': '+79123456789',
                   'address': 'home'}
-
     url = reverse('shopping_cart:checkout')
     response = client.post(url, data=valid_form)
+    assert response.status_code == 302
     assert response.url == reverse('shopping_cart:thank_you')
-    # assert Order.objects.count() == 1
+    assert Order.objects.count() == 1
+    assert OrderItem.objects.first().quantity == product_qty
+    assert OrderItem.objects.first().product == product
+    assert CartItem.objects.count() == 0
 
 
 @pytest.mark.django_db
-def test_checkout_view_invalid_form():
-    pass
+def test_checkout_view_invalid_form(client, cart, cart_item):
+    valid_form = {'phone': '+79123456789'}
+    url = reverse('shopping_cart:checkout')
+    response = client.post(url, data=valid_form)
+    assert response.status_code == 302
+    assert response.url == reverse('shopping_cart:checkout')
