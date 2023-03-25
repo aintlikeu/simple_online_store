@@ -15,8 +15,11 @@ source env/bin/activate  # for Unix/Linux
 env\Scripts\activate  # for Windows
 pip install -r requirements.txt
 ```
-Create `config.yaml` file (see `config.example.yaml`).
-
+Create config file:
+```
+cd online_store
+cp config.example.yaml config.yaml
+```
 Make and apply the database migrations:
 ```
 python manage.py makemigrations
