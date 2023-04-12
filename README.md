@@ -5,7 +5,7 @@ The educational project built on Django. The project contains 3 apps: shopping_c
 ## Getting Started
 To get started with this project, clone the repository:
 ```
-git clone https://github.com/razzzzzr/simple_online_store.git
+git clone https://github.com/aintlikeu/simple_online_store.git
 ```
 Create a virtual environment and install the project dependencies:
 ```
